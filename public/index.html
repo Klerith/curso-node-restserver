@@ -12,8 +12,33 @@
 
     <h1>Google Signin</h1>
     <hr>
+    
+    <div id="g_id_onload"
+        data-client_id="1023916028923-mnn067lcjn3itrr0lo8oj1s07kddgrcj.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse"
+        data-auto_prompt="false">
+    </div>
 
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+      </div>
+
+    <script>
+    function handleCredentialResponse(response) {
+        // decodeJwtResponse() is a custom function defined by you
+        // to decode the credential response.
+        console.log(response.credential);
+
+    }
+    </script>
+
+
+    <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div>
 
 
     <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -57,7 +82,8 @@
             console.log('User signed out.');
             });
         }
-    </script>
+    </script> -->
 
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 </html>
