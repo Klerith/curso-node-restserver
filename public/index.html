@@ -28,12 +28,28 @@
          data-logo_alignment="left">
       </div>
 
+
+      <button id="g_id_signout">Sign Out</button>
+
     <script>
     function handleCredentialResponse(response) {
-        // decodeJwtResponse() is a custom function defined by you
-        // to decode the credential response.
-        console.log(response.credential);
 
+        const body = { id_token: response.credential }
+        fetch('http://localhost:8080/api/auth/google', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+        .then( r=> r.json() ).then( console.log )
+        .catch( console.warn )
+    }
+
+
+    const button = document.getElementById('g_id_signout');
+    button.onclick = () => {
+      google.accounts.id.disableAutoSelect();
     }
     </script>
 
