@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Signin</title>
 
-    <meta name="google-signin-client_id" content="1023916028923-mnn067lcjn3itrr0lo8oj1s07kddgrcj.apps.googleusercontent.com">
 
 </head>
 <body>
@@ -16,7 +15,8 @@
     <div id="g_id_onload"
         data-client_id="1023916028923-mnn067lcjn3itrr0lo8oj1s07kddgrcj.apps.googleusercontent.com"
         data-callback="handleCredentialResponse"
-        data-auto_prompt="false">
+        data-auto_prompt="false"
+        data-auto_select="true">
     </div>
 
     <div class="g_id_signin"
@@ -31,6 +31,12 @@
 
       <button id="g_id_signout">Sign Out</button>
 
+
+      <hr>
+      <h1>One Tap</h1>
+     
+
+
     <script>
     function handleCredentialResponse(response) {
 
@@ -42,63 +48,30 @@
             },
             body: JSON.stringify(body)
         })
-        .then( r=> r.json() ).then( console.log )
+        .then( r=> r.json() )
+        .then( resp =>{
+            console.log(resp )
+            localStorage.setItem('email', resp.usuario.correo )
+        })
         .catch( console.warn )
     }
 
 
     const button = document.getElementById('g_id_signout');
-    button.onclick = () => {
-      google.accounts.id.disableAutoSelect();
+    button.onclick = async() => {
+
+        console.log(google.accounts.id)
+        google.accounts.id.disableAutoSelect()
+        google.accounts.id.revoke(localStorage.getItem('email'), done => {
+            console.log('consent revoked');
+            localStorage.clear()
+            location.reload()
+        });
     }
+
+
     </script>
 
-
-    <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div>
-
-
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-
-    <a href="#" onclick="signOut();">Sign out</a>
-
-    <script>
-
-        console.log(window.location.hostname.includes('localhost'))
-
-        var url = ( window.location.hostname.includes('localhost') )
-                    ? 'http://localhost:8080/api/auth/google'
-                    : 'https://restserver-curso-fher.herokuapp.com/api/auth/google';
-
-
-        function onSignIn(googleUser) {
-
-            var profile = googleUser.getBasicProfile();
-            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
-            var id_token = googleUser.getAuthResponse().id_token;
-            const data = { id_token };
-
-            fetch( url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify( data )
-            })
-            .then( resp => resp.json() )
-            .then( data => console.log( 'Nuestro server', data ) )
-            .catch( console.log );
-            
-        }
-
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-            console.log('User signed out.');
-            });
-        }
-    </script> -->
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
